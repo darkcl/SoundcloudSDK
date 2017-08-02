@@ -7,62 +7,58 @@
 //
 
 import XCTest
+import Foundation
 
 class RequestTests: XCTestCase {
     // MARK: HTTPParametersConvertible
-    ////////////////////////////////////////////////////////////////////////////
 
     func testGETString() {
-        let method = HTTPMethod.GET
-        let URL = NSURL(string: "http://github.com")!
+        let method = HTTPMethod.get
+        let url = URL(string: "http://github.com")!
         let parameters = "test=123"
-        let URLRequest = method.URLRequest(URL, parameters: parameters)
+        let urlRequest = method.urlRequest(url: url, parameters: parameters)
 
-        let expectedValue = URL.absoluteString + "?" + parameters
+        let expectedValue = url.absoluteString + "?" + parameters
 
-        XCTAssert(URLRequest.URL?.absoluteString == expectedValue, "Test failed: URLRequest.URL isn't what it's supposed to be.")
+        XCTAssert(urlRequest.url?.absoluteString == expectedValue, "Test failed: URLRequest.URL isn't what it's supposed to be.")
     }
 
     func testGETDictionary() {
-        let method = HTTPMethod.GET
-        let URL = NSURL(string: "http://github.com")!
+        let method = HTTPMethod.get
+        let url = URL(string: "http://github.com")!
         let parameters = ["test": "123"]
-        let URLRequest = method.URLRequest(URL, parameters: parameters)
+        let urlRequest = method.urlRequest(url: url, parameters: parameters)
 
-        let expectedValue = URL.absoluteString + "?" + parameters.queryString
+        let expectedValue = url.absoluteString + "?" + parameters.queryString
 
-        XCTAssert(URLRequest.URL?.absoluteString == expectedValue, "Test failed: URLRequest.URL isn't what it's supposed to be.")
+        XCTAssert(urlRequest.url?.absoluteString == expectedValue, "Test failed: URLRequest.URL isn't what it's supposed to be.")
     }
 
     func testPOSTString() {
-        let method = HTTPMethod.POST
-        let URL = NSURL(string: "http://github.com")!
+        let method = HTTPMethod.post
+        let url = URL(string: "http://github.com")!
         let parameters = "test=123"
-        let URLRequest = method.URLRequest(URL, parameters: parameters)
+        let urlRequest = method.urlRequest(url: url, parameters: parameters)
 
-        let expectedValue = parameters.dataUsingEncoding(NSUTF8StringEncoding)!
+        let expectedValue = parameters.data(using: .utf8)!
 
-        XCTAssert(URLRequest.URL == URL, "Test failed: URLRequest.URL isn't what it's supposed to be.")
-        XCTAssert(URLRequest.HTTPBody == expectedValue, "Test failed: URLRequest.HTTPBody isn't what it's supposed to be.")
+        XCTAssert(urlRequest.url == url, "Test failed: URLRequest.URL isn't what it's supposed to be.")
+        XCTAssert(urlRequest.httpBody == expectedValue, "Test failed: URLRequest.HTTPBody isn't what it's supposed to be.")
     }
 
     func testPOSTDictionary() {
-        let method = HTTPMethod.POST
-        let URL = NSURL(string: "http://github.com")!
+        let method = HTTPMethod.post
+        let url = URL(string: "http://github.com")!
         let parameters = ["test": "123"]
-        let URLRequest = method.URLRequest(URL, parameters: parameters)
+        let urlRequest = method.urlRequest(url: url, parameters: parameters)
 
-        let expectedValue = parameters.queryString.dataUsingEncoding(NSUTF8StringEncoding)!
+        let expectedValue = parameters.queryString.data(using: .utf8)!
 
-        XCTAssert(URLRequest.URL == URL, "Test failed: URLRequest.URL isn't what it's supposed to be.")
-        XCTAssert(URLRequest.HTTPBody == expectedValue, "Test failed: URLRequest.HTTPBody isn't what it's supposed to be.")
+        XCTAssert(urlRequest.url == url, "Test failed: URLRequest.URL isn't what it's supposed to be.")
+        XCTAssert(urlRequest.httpBody == expectedValue, "Test failed: URLRequest.HTTPBody isn't what it's supposed to be.")
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-
     // MARK: URL Encode
-    ////////////////////////////////////////////////////////////////////////////
 
     func testURLEncoding() {
         let parameters = [
@@ -79,6 +75,4 @@ class RequestTests: XCTestCase {
         XCTAssert(parameters["4"]!.urlEncodedValue == "4%40", "4@ should be transformed to 4%40")
         XCTAssert(parameters["5"]!.urlEncodedValue == "%25%40%20%26%20test%20%3D", "%@ should be transformed to %25%40%20%26%20test%20%3D")
     }
-
-    ////////////////////////////////////////////////////////////////////////////
 }

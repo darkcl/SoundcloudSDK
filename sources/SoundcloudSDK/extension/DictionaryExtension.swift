@@ -8,52 +8,37 @@
 
 import Foundation
 
-// MARK: - StringExtension
-////////////////////////////////////////////////////////////////////////////
+// MARK: - URL Encoding
 
-internal extension String {
-    // MARK: URL Encoding
-    ////////////////////////////////////////////////////////////////////////////
-
+extension String {
     var urlEncodedValue: String {
-        let allowedSet = NSCharacterSet(charactersInString: "=\"#%/<>?@\\^`{|}&: ").invertedSet
-        let escapedString = stringByAddingPercentEncodingWithAllowedCharacters(allowedSet)
+        let allowedSet = CharacterSet(charactersIn: "=\"#%/<>?@\\^`{|}&: ").inverted
+        let escapedString = addingPercentEncoding(withAllowedCharacters: allowedSet)
         return escapedString ?? self
     }
-
-    ////////////////////////////////////////////////////////////////////////////
 }
 
-////////////////////////////////////////////////////////////////////////////
+// MARK: - Query String
 
-
-// MARK: - DictionaryExtension
-////////////////////////////////////////////////////////////////////////////
-
-internal extension Dictionary {
-    // MARK: Query string
-    ////////////////////////////////////////////////////////////////////////////
-
+extension Dictionary {
     var queryString: String {
-        let parts = map({(key, value) -> String in
+        let parts = map { (key, value) -> String in
             let keyStr = "\(key)"
             let valueStr = "\(value)"
             return "\(keyStr)=\(valueStr.urlEncodedValue)"
-        })
-        return parts.joinWithSeparator("&")
+        }
+        return parts.joined(separator: "&")
     }
-
-    ////////////////////////////////////////////////////////////////////////////
 }
 
+// MARK: - HTTPParametersConvertible
+
 extension Dictionary: HTTPParametersConvertible {
-    var stringValue: String {
+    var queryStringValue: String {
         return queryString
     }
 
-    var dataValue: NSData {
-        return queryString.dataUsingEncoding(NSUTF8StringEncoding) ?? NSData()
+    var formDataValue: Data {
+        return queryString.data(using: .utf8) ?? Data()
     }
 }
-
-////////////////////////////////////////////////////////////////////////////
