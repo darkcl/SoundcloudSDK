@@ -87,11 +87,11 @@ public func ==(lhs: SoundcloudError, rhs: SoundcloudError) -> Bool {
 
 extension PaginatedAPIResponse {
     init(error: SoundcloudError) {
-        self.init(response: .failure(error), nextPageURL: nil) { _ in .failure(error) }
+        self.init(response: .failure(error), nextPageURL: nil, params: nil) { _ in .failure(error) }
     }
 
-    init(JSON: JSONObject, parse: @escaping (JSONObject) -> Result<[T], SoundcloudError>) {
-        self.init(response: parse(JSON["collection"]), nextPageURL: JSON["next_href"].urlValue, parse: parse)
+    init(JSON: JSONObject, params: [String: String]?, parse: @escaping (JSONObject) -> Result<[T], SoundcloudError>) {
+        self.init(response: parse(JSON["collection"]), nextPageURL: JSON["next_href"].urlValue, params: params, parse: parse)
     }
 }
 
@@ -258,7 +258,7 @@ extension Session {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<Activity>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }

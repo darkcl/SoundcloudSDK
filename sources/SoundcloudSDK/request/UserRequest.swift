@@ -61,7 +61,7 @@ public extension User {
 
         let parameters = ["client_id": clientIdentifier, "linked_partitioning": "true", "q": query]
         let request = Request(url: BaseURL, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<User>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -108,7 +108,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<Track>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -150,7 +150,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<Comment>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -192,7 +192,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<Track>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -234,7 +234,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<User>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -276,7 +276,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<User>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }
@@ -426,7 +426,7 @@ public extension User {
         }
 
         let request = Request(url: url, method: .get, parameters: parameters, parse: { JSON -> Result<PaginatedAPIResponse<Playlist>, SoundcloudError> in
-            return .success(PaginatedAPIResponse(JSON: JSON, parse: parse))
+            return .success(PaginatedAPIResponse(JSON: JSON, params: parameters, parse: parse))
         }) { result in
             completion(result.recover { PaginatedAPIResponse(error: $0) })
         }

@@ -38,16 +38,19 @@ public struct PaginatedAPIResponse<T>: APIResponse {
     public let response: Result<[T], SoundcloudError>
 
     private let nextPageURL: URL?
+    private let params: [String: String]?
     private let parse: (JSONObject) -> Result<[T], SoundcloudError>
 
     // MARK: Initialization
 
     init(response: Result<[T], SoundcloudError>,
-        nextPageURL: URL?,
+         nextPageURL: URL?,
+         params: [String: String]?,
         parse: @escaping (JSONObject) -> Result<[T], SoundcloudError>) {
             self.response = response
             self.nextPageURL = nextPageURL
             self.parse = parse
+            self.params = params
     }
 
     // MARK: Next page
@@ -62,9 +65,9 @@ public struct PaginatedAPIResponse<T>: APIResponse {
             let request = Request(
                 url: nextPageURL,
                 method: .get,
-                parameters: nil,
+                parameters: params,
                 parse: { JSON -> Result<PaginatedAPIResponse, SoundcloudError> in
-                    return .success(PaginatedAPIResponse(JSON: JSON, parse: self.parse))
+                    return .success(PaginatedAPIResponse(JSON: JSON, params: self.params, parse: self.parse))
             }) { result in
                 completion(result.recover { PaginatedAPIResponse(error: $0) })
             }
